@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>babyselris ♡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-pink: #ff8fa3;
+      --soft-pink: #fff0f3;
+      --card-bg: #ffffff;
+      --border-pink: #ffccd5;
+      --text-main: #594a4e;
+      --text-sub: #8c7a80;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Itim', 'Kanit', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #fff9fb;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(#ffe5ec 1px, transparent 1px),
+        radial-gradient(#ffe5ec 1px, #fff9fb 1px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px 16px 40px 16px;
+      position: relative;
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1.5px solid var(--border-pink);
+      border-radius: 30px;
+      padding: 4px 6px;
+      margin-bottom: 24px;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(255, 182, 193, 0.15);
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex: 1;
+      justify-content: space-around;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      color: #9e8e93;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .nav-btn.active {
+      background: var(--soft-pink);
+      color: #ff5c7a;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(255, 143, 163, 0.2);
+    }
+
+    .music-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1.5px solid var(--border-pink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+
+    .music-btn.playing {
+      animation: bounce 1.2s infinite;
+      border-color: var(--primary-pink);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .banner-container {
+      width: 100%;
+      height: 190px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1.5px solid var(--border-pink);
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(255, 182, 193, 0.2);
+    }
+
+    .banner-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: -45px;
+      margin-bottom: 16px;
+    }
+
+    .profile-avatar {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      border: 4px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(255, 143, 163, 0.35);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      margin-top: 10px;
+      font-size: 19px;
+      font-weight: 500;
+      color: #4a3e42;
+    }
+
+    .dashed-box {
+      border: 1.5px dashed #ffb3c1;
+      border-radius: 20px;
+      padding: 16px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.85);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      color: #635358;
+      white-space: pre-line;
+    }
+
+    .story-section-title {
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: #554449;
+    }
+
+    .story-list {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .story-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      font-size: 12px;
+      color: #8c7a80;
+    }
+
+    .story-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      padding: 2px;
+      border: 2px solid var(--primary-pink);
+      overflow: hidden;
+      margin-bottom: 6px;
+      background: #fff;
+    }
+
+    .story-circle img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .card-box {
+      background: #ffffff;
+      border: 1.5px solid var(--border-pink);
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(255, 182, 193, 0.1);
+    }
+
+    .card-title {
+      color: #ff5c7a;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-pill {
+      width: 100%;
+      border: 1.5px solid var(--border-pink);
+      border-radius: 25px;
+      padding: 10px 16px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .textarea-box {
+      width: 100%;
+      border: 1.5px solid var(--border-pink);
+      border-radius: 18px;
+      padding: 12px 16px;
+      font-size: 14px;
+      outline: none;
+      min-height: 85px;
+      resize: none;
+      background: #fff;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .rating-stars {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      font-size: 24px;
+      color: #ffd166;
+      cursor: pointer;
+      margin-bottom: 14px;
+    }
+
+    .btn-pink {
+      width: 100%;
+      background: #ff8fa3;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 11px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(255, 143, 163, 0.35);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border-pink);
+      border-radius: 20px;
+      margin-bottom: 12px;
+      background: #ffffff;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .contact-icon { font-size: 26px; }
+    .contact-text strong { font-size: 14px; display: block; color: #4a3e42; }
+    .contact-text span { font-size: 12px; color: var(--text-sub); }
+
+    .detail-list {
+      list-style: none;
+      font-size: 14px;
+      line-height: 2;
+      color: #554449;
+    }
+
+    .review-item {
+      background: #fff;
+      border: 1.5px solid var(--border-pink);
+      border-radius: 18px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+    }
+
+    .review-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .review-item-comment {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- เล่นเพลงเสียงพื้นหลัง -->
+  <audio id="bg-audio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"></audio>
+
+  <div class="app-container">
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+      <div class="nav-tabs">
+        <button class="nav-btn active" onclick="switchTab('home')">Home</button>
+        <button class="nav-btn" onclick="switchTab('review')">Review</button>
+        <button class="nav-btn" onclick="switchTab('contact')">Contact</button>
+        <button class="nav-btn" onclick="switchTab('details')">Details</button>
+      </div>
+      <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic(event)">🎵</button>
+    </div>
+
+    <!-- HOME -->
+    <div id="tab-home" class="tab-content active">
+      <div class="banner-container">
+        <img id="bannerImg" src="https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif" alt="Banner">
+      </div>
+
+      <div class="profile-wrap">
+        <div class="profile-avatar">
+          <img id="profileImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Profile">
+        </div>
+        <div class="profile-name" id="shopNameText">babyselris ♡</div>
+      </div>
+
+      <div class="dashed-box" id="bioText">
+        🎀 Welcome to babyselris ♡
+        app premium ขายป้าย ทำเว็บไซต์
+        ♡ ส่งไว เปลี่ยนข้อมูลไว ส่งงานไวค้าบ
+      </div>
+
+      <div class="story-section-title">🌸 review babyselris</div>
+      <div class="story-list">
+        <div class="story-item">
+          <div class="story-circle"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80" alt=""></div>
+          <span>socute♡</span>
+        </div>
+        <div class="story-item">
+          <div class="story-circle"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80" alt=""></div>
+          <span>socute♡</span>
+        </div>
+        <div class="story-item">
+          <div class="story-circle"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=200&q=80" alt=""></div>
+          <span>socute♡</span>
+        </div>
+        <div class="story-item">
+          <div class="story-circle"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt=""></div>
+          <span>♡</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEW -->
+    <div id="tab-review" class="tab-content">
+      <div class="card-box">
+        <div style="text-align: center; color: #ff758f; margin-bottom: 12px;">Review babyselris♡</div>
+        <input type="text" id="reviewAuthor" class="input-pill" placeholder="your name♡">
+        
+        <div class="rating-stars" id="starContainer">
+          <span onclick="setRating(1)">★</span>
+          <span onclick="setRating(2)">★</span>
+          <span onclick="setRating(3)">★</span>
+          <span onclick="setRating(4)">★</span>
+          <span onclick="setRating(5)">★</span>
+        </div>
+
+        <textarea id="reviewComment" class="textarea-box" placeholder="comment dailoey nakaa♡"></textarea>
+        <button class="btn-pink" onclick="submitReview()">sent review♡</button>
+      </div>
+
+      <div style="font-size: 14px; margin-bottom: 10px; color: #665;">💬 รีวิวทั้งหมด</div>
+      <div id="reviewList">
+        <div class="review-item">
+          <div class="review-item-header">
+            <span>เริ่ดมากค่ะ 🪽</span>
+            <span style="color: #ffd166;">★★★★★</span>
+          </div>
+          <div class="review-item-comment">ทดสอบระบบ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="tab-contact" class="tab-content">
+      <div class="dashed-box" style="margin-bottom: 16px;">
+        Contact me ♡<br>
+        <span style="font-size: 12px; color: #887;">ทักสอบถามคิวง่าน หรือสั่งซื้อทางช่องทางด้านล่างได้เลยนะคะ ✨</span>
+      </div>
+
+      <a href="https://line.me" target="_blank" class="contact-item">
+        <div class="contact-icon">💬</div>
+        <div class="contact-text">
+          <strong>LINE Official Account</strong>
+          <span>สั่งแอพพรีเมี่ยมทักได้เลยนะคะ งานป้าย งานเว็บไซต์</span>
+        </div>
+      </a>
+
+      <a href="https://line.me" target="_blank" class="contact-item">
+        <div class="contact-icon">💌</div>
+        <div class="contact-text">
+          <strong>LINE (หลัก) ส่วนตัว</strong>
+          <span>ติดต่อกรณีเร่งด่วน หรือแจ้งปัญหา</span>
+        </div>
+      </a>
+
+      <a href="https://facebook.com" target="_blank" class="contact-item">
+        <div class="contact-icon">🌸</div>
+        <div class="contact-text">
+          <strong>Facebook Page</strong>
+          <span>เฟสบินบ่อย จึงเพิ่มเฟสหลักไว้นะคะ</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- DETAILS -->
+    <div id="tab-details" class="tab-content">
+      <div class="card-box">
+        <div class="card-title">🎀 รายละเอียดร้านเจอร์รี่</div>
+        <ul class="detail-list">
+          <li>• <strong>open-close :</strong> 09:00 - 22:00 น. (นอกเวลาทักทิ้งไว้ได้เลยค่ะ)</li>
+          <li>• <strong>หากไม่ตอบ :</strong> ไม่ตอบเกิน 2 นาที สามารถทักซ้ำได้เลยค่ะ</li>
+          <li>• <strong>การแก้ไขงาน :</strong> สามารถแก้ไขรายละเอียดเล็กน้อยได้ฟรี 2 ครั้ง</li>
+          <li>• <strong>การชำระเงิน :</strong> รองรับพร้อมเพย์ ธนาคาร และทรูมันนี่วอลเล็ท</li>
+        </ul>
+      </div>
+
+      <div class="dashed-box" style="border-radius: 25px; padding: 14px;">
+        ขอบคุณที่มาอุดหนุนกันนะคะ ♡
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCkcPDpXEX4Hopb8d7qJu1UypTKXEC0rqw",
+      authDomain: "butterbear-d2afd.firebaseapp.com",
+      projectId: "butterbear-d2afd",
+      storageBucket: "butterbear-d2afd.firebasestorage.app",
+      messagingSenderId: "721696079994",
+      appId: "1:721696079994:web:e1cf38eb821aae3561bbc3",
+      measurementId: "G-GBTV8DVBR3"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ดึงข้อมูล Realtime จากหลังบ้าน
+    db.collection('siteConfig').doc('main').onSnapshot((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        if (data.bannerUrl) document.getElementById('bannerImg').src = data.bannerUrl;
+        if (data.profileUrl) document.getElementById('profileImg').src = data.profileUrl;
+        if (data.shopName) document.getElementById('shopNameText').innerText = data.shopName;
+        if (data.bioText) document.getElementById('bioText').innerText = data.bioText;
+        if (data.musicUrl && audio.src !== data.musicUrl) {
+          audio.src = data.musicUrl;
+        }
+      }
+    });
+
+    // ระบบเพลง: แตะตรงไหนก็ได้ในหน้าจอ เพลงจะเริ่มเล่นทันที
+    const audio = document.getElementById('bg-audio');
+    const musicBtn = document.getElementById('musicToggleBtn');
+    let hasInteracted = false;
+
+    document.addEventListener('click', function(e) {
+      if (!hasInteracted && !e.target.closest('#musicToggleBtn')) {
+        audio.play().then(() => {
+          musicBtn.classList.add('playing');
+        }).catch(err => console.log(err));
+        hasInteracted = true;
+      }
+    }, { once: true });
+
+    function toggleMusic(e) {
+      e.stopPropagation();
+      if (audio.paused) {
+        audio.play();
+        musicBtn.classList.add('playing');
+      } else {
+        audio.pause();
+        musicBtn.classList.remove('playing');
+      }
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    let currentRating = 5;
+    function setRating(stars) {
+      currentRating = stars;
+      const spans = document.getElementById('starContainer').getElementsByTagName('span');
+      for (let i = 0; i < 5; i++) {
+        spans[i].style.color = (i < stars) ? '#ffd166' : '#ddd';
+      }
+    }
+
+    function submitReview() {
+      const name = document.getElementById('reviewAuthor').value.trim() || 'ลูกค้าคนน่ารัก';
+      const comment = document.getElementById('reviewComment').value.trim();
+      if (!comment) return alert('กรุณากรอกข้อความรีวิวน้า ♡');
+
+      const reviewList = document.getElementById('reviewList');
+      const stars = '★'.repeat(currentRating) + '☆'.repeat(5 - currentRating);
+      
+      const newReview = document.createElement('div');
+      newReview.className = 'review-item';
+      newReview.innerHTML = `
+        <div class="review-item-header">
+          <span>${name} ♡</span>
+          <span style="color: #ffd166;">${stars}</span>
+        </div>
+        <div class="review-item-comment">${comment}</div>
+      `;
+      reviewList.prepend(newReview);
+
+      document.getElementById('reviewAuthor').value = '';
+      document.getElementById('reviewComment').value = '';
+      alert('ขอบคุณสำหรับรีวิวนะคะ 🎀');
+    }
+  </script>
+</body>
+</html>
