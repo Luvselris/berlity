@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - babyselris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #ff8fa3;
+      --primary-hover: #ff758f;
+      --bg: #fff5f7;
+      --card-bg: #ffffff;
+      --border: #ffccd5;
+      --text: #4a3e42;
+      --text-muted: #8c7a80;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Itim', 'Kanit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(255, 143, 163, 0.15);
+    }
+
+    .header-title {
+      text-align: center;
+      color: var(--primary-hover);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .input-pill {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 10px 16px;
+      font-size: 14px;
+      outline: none;
+      background: #fafafa;
+      color: var(--text);
+      transition: border 0.2s;
+    }
+
+    .input-pill:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    textarea.input-pill {
+      min-height: 90px;
+      border-radius: 16px;
+      resize: vertical;
+    }
+
+    .file-select-box {
+      border: 1.5px dashed var(--primary);
+      border-radius: 14px;
+      padding: 10px;
+      text-align: center;
+      background: #fff9fb;
+      margin-top: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .file-select-box input {
+      display: none;
+    }
+
+    .preview-box {
+      width: 100%;
+      max-height: 140px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 8px;
+      display: none;
+      border: 1px solid var(--border);
+      background: #eee;
+    }
+
+    .preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-avatar {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      margin: 8px auto 0 auto;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 22px;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 143, 163, 0.3);
+      transition: all 0.2s;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-logout {
+      background: #e0d5d7;
+      color: #615257;
+      box-shadow: none;
+      margin-top: 8px;
+    }
+
+    .btn-logout:hover {
+      background: #cfc2c5;
+    }
+
+    .badge-status {
+      text-align: center;
+      font-size: 12px;
+      color: #8c7a80;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- จอ Login แอดมิน -->
+  <div class="container" id="loginCard">
+    <div class="header-title">🔐 เข้าสู่ระบบ Admin</div>
+    
+    <div class="form-group">
+      <label>Email Admin</label>
+      <input type="email" id="adminEmail" class="input-pill" placeholder="srezinalm@gmail.com">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="adminPassword" class="input-pill" placeholder="••••••••">
+    </div>
+
+    <button class="btn-submit" onclick="login()">เข้าสู่ระบบ</button>
+  </div>
+
+  <!-- จอแผงควบคุมหลัก (Dashboard) -->
+  <div class="container" id="dashboardCard" style="display: none;">
+    <div class="header-title">🛠️ จัดการหน้าเว็บ babyselris</div>
+
+    <!-- 1. แบนเนอร์ GIF / Image -->
+    <div class="form-group">
+      <label>1. แบนเนอร์ (Banner GIF / รูปภาพ)</label>
+      <input type="text" id="bannerUrl" class="input-pill" placeholder="วางลิงก์รูป หรือ ลิงก์ GIF" oninput="updatePreview('banner', this.value)">
+      <label class="file-select-box">
+        📂 เลือกไฟล์รูป/GIF จากเครื่อง
+        <input type="file" id="bannerFileInput" accept="image/*" onchange="handleFileSelect(event, 'banner')">
+      </label>
+      <div class="preview-box" id="bannerPreviewBox"><img id="bannerPreviewImg"></div>
+    </div>
+
+    <!-- 2. โปรไฟล์ GIF / Image -->
+    <div class="form-group">
+      <label>2. รูปโปรไฟล์ (Profile GIF / รูปภาพ)</label>
+      <input type="text" id="profileUrl" class="input-pill" placeholder="วางลิงก์รูปโปรไฟล์" oninput="updatePreview('profile', this.value)">
+      <label class="file-select-box">
+        📂 เลือกรูปโปรไฟล์จากเครื่อง
+        <input type="file" id="profileFileInput" accept="image/*" onchange="handleFileSelect(event, 'profile')">
+      </label>
+      <div class="preview-box preview-avatar" id="profilePreviewBox"><img id="profilePreviewImg"></div>
+    </div>
+
+    <!-- 3. ชื่อร้านและคำอธิบาย -->
+    <div class="form-group">
+      <label>3. ชื่อร้านค้า</label>
+      <input type="text" id="shopName" class="input-pill" placeholder="babyselris ♡">
+    </div>
+
+    <div class="form-group">
+      <label>4. ข้อความต้อนรับ (Bio / รายละเอียด)</label>
+      <textarea id="bioText" class="input-pill" placeholder="ข้อความหน้าแรก..."></textarea>
+    </div>
+
+    <!-- 5. เพลงพื้นหลัง -->
+    <div class="form-group">
+      <label>5. ลิงก์เพลง (.mp3 / Direct Stream)</label>
+      <input type="text" id="musicUrl" class="input-pill" placeholder="https://example.com/music.mp3">
+    </div>
+
+    <button class="btn-submit" onclick="saveSettings()">💾 บันทึกและเผยแพร่ทันที</button>
+    <button class="btn-submit btn-logout" onclick="logout()">🚪 ออกจากระบบ</button>
+    <div class="badge-status" id="statusMessage">สถานะ: เชื่อมต่อ Firebase สำเร็จ</div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Config โปรเจกต์ butterbear-d2afd
+    const firebaseConfig = {
+      apiKey: "AIzaSyCkcPDpXEX4Hopb8d7qJu1UypTKXEC0rqw",
+      authDomain: "butterbear-d2afd.firebaseapp.com",
+      projectId: "butterbear-d2afd",
+      storageBucket: "butterbear-d2afd.firebasestorage.app",
+      messagingSenderId: "721696079994",
+      appId: "1:721696079994:web:e1cf38eb821aae3561bbc3",
+      measurementId: "G-GBTV8DVBR3"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const AUTH_EMAIL = "srezinalm@gmail.com";
+    const AUTH_PASS = "@punpunz9";
+
+    let bannerBase64 = "";
+    let profileBase64 = "";
+
+    function login() {
+      const email = document.getElementById('adminEmail').value.trim();
+      const pass = document.getElementById('adminPassword').value.trim();
+
+      if (email === AUTH_EMAIL && pass === AUTH_PASS) {
+        document.getElementById('loginCard').style.display = 'none';
+        document.getElementById('dashboardCard').style.display = 'block';
+        loadCurrentData();
+      } else {
+        alert('อีเมลหรือรหัสผ่านไม่ถูกต้องค่ะ!');
+      }
+    }
+
+    function logout() {
+      document.getElementById('dashboardCard').style.display = 'none';
+      document.getElementById('loginCard').style.display = 'block';
+    }
+
+    // โหลดข้อมูลล่าสุดจาก Firestore มาแสดงในฟอร์ม
+    function loadCurrentData() {
+      db.collection('siteConfig').doc('main').get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data.bannerUrl) {
+            document.getElementById('bannerUrl').value = data.bannerUrl.startsWith('data:') ? '' : data.bannerUrl;
+            updatePreview('banner', data.bannerUrl);
+          }
+          if (data.profileUrl) {
+            document.getElementById('profileUrl').value = data.profileUrl.startsWith('data:') ? '' : data.profileUrl;
+            updatePreview('profile', data.profileUrl);
+          }
+          if (data.shopName) document.getElementById('shopName').value = data.shopName;
+          if (data.bioText) document.getElementById('bioText').value = data.bioText;
+          if (data.musicUrl) document.getElementById('musicUrl').value = data.musicUrl;
+        }
+      }).catch(err => {
+        console.error("Firebase read error:", err);
+      });
+    }
+
+    // แปลงไฟล์จากเครื่องเป็น Base64 รองรับทั้ง GIF และ PNG/JPG
+    function handleFileSelect(event, type) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const result = e.target.result;
+        if (type === 'banner') {
+          bannerBase64 = result;
+          document.getElementById('bannerUrl').value = '';
+          updatePreview('banner', result);
+        } else {
+          profileBase64 = result;
+          document.getElementById('profileUrl').value = '';
+          updatePreview('profile', result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function updatePreview(type, url) {
+      if (type === 'banner') {
+        const box = document.getElementById('bannerPreviewBox');
+        const img = document.getElementById('bannerPreviewImg');
+        if (url) {
+          img.src = url;
+          box.style.display = 'block';
+        } else {
+          box.style.display = 'none';
+        }
+      } else {
+        const box = document.getElementById('profilePreviewBox');
+        const img = document.getElementById('profilePreviewImg');
+        if (url) {
+          img.src = url;
+          box.style.display = 'block';
+        } else {
+          box.style.display = 'none';
+        }
+      }
+    }
+
+    // บันทึกขึ้น Cloud Firestore
+    function saveSettings() {
+      const bannerLink = document.getElementById('bannerUrl').value.trim();
+      const profileLink = document.getElementById('profileUrl').value.trim();
+      const shopName = document.getElementById('shopName').value.trim();
+      const bioText = document.getElementById('bioText').value.trim();
+      const musicUrl = document.getElementById('musicUrl').value.trim();
+
+      const finalBanner = bannerBase64 || bannerLink;
+      const finalProfile = profileBase64 || profileLink;
+
+      const updatePayload = {
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      if (finalBanner) updatePayload.bannerUrl = finalBanner;
+      if (finalProfile) updatePayload.profileUrl = finalProfile;
+      if (shopName) updatePayload.shopName = shopName;
+      if (bioText) updatePayload.bioText = bioText;
+      if (musicUrl) updatePayload.musicUrl = musicUrl;
+
+      const status = document.getElementById('statusMessage');
+      status.innerText = "⏳ กำลังบันทึกข้อมูล...";
+
+      db.collection('siteConfig').doc('main').set(updatePayload, { merge: true })
+        .then(() => {
+          status.innerText = "✅ บันทึกและซิงค์ไปยังหน้าเว็บหลักแล้ว!";
+          alert("บันทึกข้อมูลสำเร็จ! หน้าเว็บหลักจะเปลี่ยนทันทีค่ะ");
+        })
+        .catch((error) => {
+          status.innerText = "❌ เกิดข้อผิดพลาดในการบันทึก";
+          console.error(error);
+          alert("ไม่สามารถบันทึกได้: " + error.message);
+        });
+    }
+  </script>
+</body>
+</html>
